@@ -1,10 +1,10 @@
 package com.eventify.eventify.service;
 
 import com.eventify.eventify.model.Venue;
-import com.eventify.eventify.repository.EventRepository;
 import com.eventify.eventify.repository.VenueRepository;
 import com.eventify.eventify.exeption.ValidationExeption;
 import org.springframework.stereotype.Service;
+import java.util.Map;
 
 @Service
 public class VenueService {
@@ -24,6 +24,10 @@ public class VenueService {
             throw new ValidationExeption("La direccion del lugar necesita ser agregada");
 
         return venueRepo.guardar(venue);
+    }
+
+    public Map<Long, Venue> listarTodos(){
+        return venueRepo.listarTodos();
     }
 
 

@@ -3,9 +3,10 @@ package com.eventify.eventify.service;
 import com.eventify.eventify.exeption.ValidationExeption;
 import com.eventify.eventify.model.Event;
 import com.eventify.eventify.repository.EventRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
-
+@Service
 public class EventService {
     private final EventRepository eventRepo;
 

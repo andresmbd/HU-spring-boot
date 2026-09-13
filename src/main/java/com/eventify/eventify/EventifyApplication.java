@@ -9,5 +9,4 @@ public class EventifyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EventifyApplication.class, args);
 	}
-
 }
