@@ -1,7 +1,7 @@
 package com.eventify.eventify.config;
 
-import com.eventify.eventify.model.Event;
-import com.eventify.eventify.model.Venue;
+import com.eventify.eventify.entity.Event;
+import com.eventify.eventify.entity.Venue;
 import com.eventify.eventify.service.EventService;
 import com.eventify.eventify.service.VenueService;
 import org.springframework.boot.CommandLineRunner; // interfaz de Spring Boot que permite ejecutar código automáticamente cuando la aplicación termina de iniciar.

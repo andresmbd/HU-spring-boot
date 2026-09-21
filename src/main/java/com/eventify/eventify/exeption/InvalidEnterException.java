@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * error 400 Bad Request al cliente.
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST) // 400 Bad Request
-public class ValidationExeption extends RuntimeException{
-    public ValidationExeption(String message){
+public class InvalidEnterException extends RuntimeException{
+    public InvalidEnterException(String message){
         super(message);
     }
 }

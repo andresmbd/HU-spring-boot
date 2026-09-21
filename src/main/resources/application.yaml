@@ -1,3 +1,17 @@
 spring:
   application:
     name: eventify
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eventify_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # Le indica a Hibernate que cree o actualice automáticamente las tablas en PostgreSQL según tus clases @Entity (Venue, Event, etc.) sin borrar los datos existentes.
+      show-sql: true
+      properties:
+        hiberante:
+          format_sql: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect

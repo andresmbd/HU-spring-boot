@@ -1,12 +1,17 @@
 package com.eventify.eventify.controller;
 
-import com.eventify.eventify.model.Event;
+import com.eventify.eventify.entity.Event;
+import com.eventify.eventify.entity.Venue;
 import com.eventify.eventify.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,7 +26,7 @@ import java.util.Map;
  * description: Es una breve explicación que describe qué
  * tipo de operaciones se manejan dentro de esta categoría
  */
-@Tag(name = "Eventos", description = "Operaciones para registrar y consultar eventos")
+@Tag(name = "Eventos", description = "Operaciones para registrar, consultar, actualizar y eliminar eventos")
 public class EventController {
     private final EventService eventService;
 
@@ -50,13 +55,35 @@ public class EventController {
      * automáticamente en un objeto Java.
      */
     public Event registrarEvento(@RequestBody Event evento){ // Spring toma el JSON enviado y llena las propiedades del objeto 'evento'
+
         return eventService.crearEvento(evento);
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK) // 200 ok
-    @Operation(summary = "Consulatar los eventos registrados", description = "Retorna la lista todos los eventos almacenados en memoria")
-    public Map<Long, Event> listarTodos(){
-        return eventService.listarTodos();
+    @Operation(summary = "Consulta un evento registrado por su id", description = "Retorna el evento almacenado en memoria")
+    public Event obtenerEventById(@PathVariable("id") Long id){
+        return eventService.obtenerEventById(id);
+    }
+    @PutMapping("/{id}")
+    @Operation(summary = "Actulizar un evento ya existente", description = "Actualiza un evento por su id validando su existencia y con los datos originales")
+    public Event actualizarEvent(@PathVariable("id") Long id, Event event){
+        return eventService.actualizarEvent(id, event);
+    }
+
+    @GetMapping
+    @Operation(summary = "Buscar por nombre del evento", description = "Se ejecuta la consulta si se pasa el @param String claveNombre si no, se pasa el paginado")
+    public Page<Event> listarPorNombre(
+            @RequestParam(required = false) String claveNombre,
+            @ParameterObject Pageable pageable)
+    {
+        return eventService.buscarEventosPorNombre(claveNombre, pageable);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Eliminar un evento", description = "Elimina un evento por su id validando su existencia")
+    public void eliminarEvent(@PathVariable("id") Long id){
+        eventService.eliminarEvent(id);
     }
 }

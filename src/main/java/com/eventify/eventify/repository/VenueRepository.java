@@ -1,27 +1,14 @@
 package com.eventify.eventify.repository;
 
-import com.eventify.eventify.model.Venue;
+import com.eventify.eventify.entity.Venue;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Repository
-public class VenueRepository {
-    private Map<Long, Venue> lugares = new HashMap<>();
-    private Long idCounter = 1L;
-
-    public Venue guardar(Venue venue){
-        if(venue.getId() == null){
-            venue.setId(idCounter);
-            idCounter++;
-        }
-        lugares.put(venue.getId(), venue);
-        return venue;
-    }
-
-    public Map<Long, Venue> listarTodos(){
-        return lugares;
-    }
-
+public interface VenueRepository extends JpaRepository<Venue, Long> {
+    Page<Venue> findByNombreContaining(String nombreClave, Pageable pageable);
 }

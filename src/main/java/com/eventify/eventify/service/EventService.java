@@ -1,11 +1,13 @@
 package com.eventify.eventify.service;
 
-import com.eventify.eventify.exeption.ValidationExeption;
-import com.eventify.eventify.model.Event;
+import com.eventify.eventify.exeption.ResourceNotFoundException;
+import com.eventify.eventify.exeption.InvalidEnterException;
+import com.eventify.eventify.entity.Event;
 import com.eventify.eventify.repository.EventRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 @Service
 public class EventService {
     private final EventRepository eventRepo;
@@ -15,20 +17,58 @@ public class EventService {
          this.eventRepo=eventRepo;
      }
 
-     public Event crearEvento(Event evento){
+     private Event validarEvent(Event evento){
          if(evento == null){
-             throw new ValidationExeption("El evento no puede estar en nulo");
+             throw new InvalidEnterException("El evento no puede estar en nulo");
          }
          if(evento.getNombre() == null || evento.getNombre().trim().isBlank()){
-             throw new ValidationExeption("El nombre del evento no puedes estar vacio");
+             throw new InvalidEnterException("El nombre del evento no puedes estar vacio");
          }
          if(evento.getFecha() == null){
-             throw new ValidationExeption("La fecha no puede quedar vacia");
+             throw new InvalidEnterException("La fecha no puede quedar vacia");
          }
-         return eventRepo.guardar(evento);
+         return evento;
      }
 
-     public Map<Long, Event> listarTodos(){
-         return eventRepo.listarTodos();
+     public Event crearEvento(Event evento){
+         Event eventoValidado = validarEvent(evento);
+         return eventRepo.save(eventoValidado);
+     }
+
+     public Event obtenerEventById(Long id){
+         return eventRepo.findById(id)
+                 .orElseThrow(()-> new ResourceNotFoundException("No se encontro el id: "
+                         +id+" de la entidad Event"));
+     }
+
+     public Page<Event> buscarEventosPorNombre(String nombreClave, Pageable pageable){
+         if(nombreClave != null || !nombreClave.isBlank())
+             // Si mandan un filtro por nombre, usamos la derived query
+            return eventRepo.findByNombreContaining(nombreClave, pageable);
+
+         // Si no mandan nada, listamos todo paginado
+         return eventRepo.findAll(pageable);
+     }
+
+     public Event actualizarEvent(Long id, Event nuevoEvent){
+         Event eventoExistente = eventRepo.findById(id)
+                 .orElseThrow(()-> new ResourceNotFoundException("No se encontro el id: "
+                 +id+" de la entidad Event"));
+
+         Event eventoValidado = validarEvent(nuevoEvent);
+
+         eventoExistente.setNombre(eventoValidado.getNombre());
+         eventoExistente.setFecha(eventoExistente.getFecha());
+         eventoExistente.setDescripcion(eventoExistente.getDescripcion());
+
+         return eventoExistente;
+     }
+
+     public void eliminarEvent(Long id){
+         if(!eventRepo.existsById(id)){
+             throw new ResourceNotFoundException("No se encontro el id: "
+                     +id+" de la entidad Event");
+         }
+         eventRepo.deleteById(id);
      }
 }
