@@ -13,3 +13,5 @@ CREATE TABLE event (
     fecha_evento DATE NOT NULL,
     descripcion_evento VARCHAR(255) NOT NULL
 );
+
+select * from event;

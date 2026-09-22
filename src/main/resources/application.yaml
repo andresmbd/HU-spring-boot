@@ -2,7 +2,7 @@ spring:
   application:
     name: eventify
   datasource:
-    url: jdbc:postgresql://localhost:5432/eventify_db
+    url: jdbc:postgresql://localhost:5433/eventify_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
