@@ -71,6 +71,6 @@ public class EventServiceTest {
         assertEquals(2, resultado.size());
 
     }
-    
+
 
 }
