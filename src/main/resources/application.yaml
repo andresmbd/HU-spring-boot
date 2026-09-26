@@ -1,11 +1,17 @@
 spring:
   application:
     name: eventify
+
   datasource:
     url: jdbc:postgresql://localhost:5433/eventify_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+
+    # En desarrollo desactivamos la caché para ver cambios en las plantillas sin reiniciar
+    # (en producción se deja en true por rendimiento)
+  thymeleaf:
+    cache: false
 
   jpa:
     hibernate:
@@ -15,3 +21,9 @@ spring:
         hiberante:
           format_sql: true
           dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# --- Swagger / springdoc ---
+# Solo documentar los endpoints de la API REST, no las rutas del panel /admin
+springdoc:
+  paths-to-match: /api/**
+  packages-to-scan: com.eventify.eventify.controller.api

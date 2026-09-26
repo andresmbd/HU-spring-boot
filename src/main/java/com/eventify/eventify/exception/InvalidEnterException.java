@@ -1,4 +1,4 @@
-package com.eventify.eventify.exeption;
+package com.eventify.eventify.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * automáticamente detiene el proceso y devuelve un código de
  * error 400 Bad Request al cliente.
  */
-@ResponseStatus(HttpStatus.BAD_REQUEST) // 400 Bad Request
 public class InvalidEnterException extends RuntimeException{
     public InvalidEnterException(String message){
         super(message);

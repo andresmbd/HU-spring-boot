@@ -1,11 +1,12 @@
 package com.eventify.eventify.service;
 
 import com.eventify.eventify.entity.Venue;
-import com.eventify.eventify.exeption.ResourceNotFoundException;
+import com.eventify.eventify.exception.ResourceNotFoundException;
 import com.eventify.eventify.repository.VenueRepository;
-import com.eventify.eventify.exeption.InvalidEnterException;
+import com.eventify.eventify.exception.InvalidEnterException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class VenueService {
     }
 
     public Page<Venue> buscarPorNombre(String nombreClave, Pageable pageable){
-        if (nombreClave != null || !nombreClave.isBlank())
+        if (nombreClave != null && !nombreClave.isBlank())
             return venueRepo.findByNombreContaining(nombreClave, pageable);
         return venueRepo.findAll(pageable);
     }
@@ -67,4 +68,11 @@ public class VenueService {
         venueRepo.deleteById(id);
     }
 
+    public List<Venue> listarTodos(){
+        List<Venue> venues = venueRepo.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        if (venues.isEmpty()){
+            throw new ResourceNotFoundException("La lista esta vacia");
+        }
+        return venues;
+    }
 }

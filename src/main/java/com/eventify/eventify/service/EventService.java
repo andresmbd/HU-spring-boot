@@ -1,12 +1,15 @@
 package com.eventify.eventify.service;
 
-import com.eventify.eventify.exeption.ResourceNotFoundException;
-import com.eventify.eventify.exeption.InvalidEnterException;
+import com.eventify.eventify.exception.ResourceNotFoundException;
+import com.eventify.eventify.exception.InvalidEnterException;
 import com.eventify.eventify.entity.Event;
 import com.eventify.eventify.repository.EventRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EventService {
@@ -42,7 +45,7 @@ public class EventService {
      }
 
      public Page<Event> buscarEventosPorNombre(String nombreClave, Pageable pageable){
-         if(nombreClave != null || !nombreClave.isBlank())
+         if(nombreClave != null && !nombreClave.isBlank())
              // Si mandan un filtro por nombre, usamos la derived query
             return eventRepo.findByNombreContaining(nombreClave, pageable);
 
@@ -70,5 +73,13 @@ public class EventService {
                      +id+" de la entidad Event");
          }
          eventRepo.deleteById(id);
+     }
+
+     public List<Event> listarTodos(){
+         List<Event> events = eventRepo.findAll(Sort.by(Sort.Direction.ASC, "id"));
+         if (events.isEmpty()){
+             throw new ResourceNotFoundException("La lista esta vacia");
+         }
+         return events;
      }
 }
