@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<!--Primer fragmento: header con titulo  y stylesheet-->
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="|${titulo} · Eventify Admin|">Eventify Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+    <!--2do fragmento: barra de navegación-->
+    <nav th:fragment="navbar(activo)" class="navbar"> <!--Define este bloque como un fragmento reutilizable de Thymeleaf llamado navbar, el cual recibe un parámetro obligatorio llamado activo-->
+        <a th:href="@{/admin}" class="brand"> Eventify <span>Admin</span></a>
+        <ul>
+            <li><a th:href="@{/admin}" th:classappend="${activo == 'dashboard'} ? 'active'">Panel</a></li>
+            <li><a th:href="@{/admin/events}" th:classappend="${activo == 'events'} ? 'active'">Eventos</a></li>
+            <li><a th:href="@{/admin/venues}" th:classappend="${activo == 'venues'} ? 'active'">Lugares</a></li>
+            <li><a th:href="@{/swagger-ui/index.html}" target="_blank" class="nav-api"></a>API ↗<</li>
+        </ul>
+    </nav>
+
+    <!--3er fragmento alertas de éxito (flash) y de error -->
+    <div th:fragment="alerts">
+        <div th:if="${mensaje}" class="alert alert-success" th:text="${mensaje}">Operacion Exitosa</div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}">Ocurrio un error</div>
+    </div>
+
+    <!--4to fragmento: footer-->
+    <footer th:fragment="footer" class="footer">
+        <p>Eventify · Panel administrativo · Spring Boot + Thymeleaf</p>
+    </footer>
+
+</body>
+</html>

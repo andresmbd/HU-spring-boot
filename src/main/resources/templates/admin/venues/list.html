@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Lugares')}"></head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('venues')}"></nav>
+    <main class="container">
+        <div th:replace="~{fragments/layout :: alerts}"></div>
+        <header class="page-header">
+            <div>
+                <h1>Lugares</h1>
+                <p class="subtitle" th:text="|${#lists.size(venues)} lugar(es) disponibles|">0 lugar(es) disponibles</p>
+            </div>
+            <a class="btn btn-primary" th:href="@{/admin/venues/new}">+ Nuevo lugar</a>
+        </header>
+        <section class="card">
+            <div th:if="${#lists.isEmpty(venues)}" class="empty-state">
+                <p class="empty-icon">🏛️</p>
+                <p>Actualmente no hay lugares registrados</p>
+                <a class="btn btn-primary" th:href="@{/admin/venues/new}">Registrar el primer lugar</a>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(venues)}" class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Dirección</th>
+                            <th>Capacidad</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="venue, stat : ${venues}">
+                            <td th:text="${stat.count}">1</td>
+                            <td th:text="${venue.nombre}">Lugar de ejemplo</td>
+                            <td th:text="${venue.direccion}">Calle 1 #2-3</td>
+                            <td><span class="badge" th:text="|${venue.capacidad} personas|">100 personas</span></td>
+                            <td>
+                                <div class="actions">
+                                    <a class="btn btn-secondary btn-sm"
+                                        th:href="@{/admin/venues/{id}/edit(id=${venue.id})}">Editar</a>
+                                    <form class="inline-form" method="post"
+                                        th:action="@{/admin/venues/{id}/delete(id=${venue.id})}"
+                                        onsubmit="return confirm('¿Seguro que deseas eliminar este lugar?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+
+</html>

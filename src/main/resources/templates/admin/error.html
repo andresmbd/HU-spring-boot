@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Recurso no encontrado')}"></head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('')}"></nav>
+    <main class="container">
+        <section class="card error-page">
+            <p class="error-code">404</p>
+            <h1>No encontramos lo que buscas</h1>
+            <p class="subtitle" th:text="${errorMessage}">El recurso solicitado no existe.</p>
+            <br>
+            <a class="btn btn-primary" th:href="@{/admin}">Volver al panel</a>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+
+</html>

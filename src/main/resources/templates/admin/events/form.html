@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Formulario de evento')}"></head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('events')}"></nav>
+    <main class="container">
+        <header class="page-header">
+            <div>
+                <h1 th:text="${event.id == null} ? 'Nuevo evento' : 'Editar evento'">Nuevo evento</h1>
+                <p class="subtitle">Los campos marcados con * son obligatorios</p>
+            </div>
+        </header>
+
+        <section>
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+            <!--sintaxis con paréntesis en Thymeleaf sirve para construir URLs dinámicas inyectando variables-->
+            <form class="form" method="post" th:object="${event}"
+                th:action="${event.id == null} ? @{/admin/events} : @{/admin/events/{id}(id=${event.id})}">
+
+                <div class="form-group">
+                    <label for="nombre">Nombre *</label>
+                    <input type="text" th:field="*{nombre}" maxlength="150" placeholder="Ej: Conferencia Tech 2026">
+                    <span class="hint">Máximo 150 caracteres.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha">Fecha *</label>
+                    <input type="date" th:field="*{fecha}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea th:field="*{descripcion}" rows="4" maxlength="500"
+                        placeholder="¿De qué trata el evento?"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a class="btn btn-secondary" th:href="@{/admin/events}">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+
+            </form>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+
+</html>

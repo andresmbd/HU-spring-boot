@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Panel')}"></head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Dashboard')}"></nav>
+    <main class="container">
+        <div th:replace="~{fragments/layout :: alerts}"></div>
+        <header class="page-header">
+            <div>
+                <h1>Panel Administrativo</h1>
+                <p class="subtitle">Resumen del catalogo de eventos y lugares</p>
+            </div>
+        </header>
+        <!-- Tarjetas de resumen -->
+        <section class="stats">
+            <article class="stat-card">
+                <span class="stat-label">Eventos registrados</span>
+                <span class="stat-value" th:text="${totalEventos}">0</span>
+                <a th:href="@{/admin/events}">Gestionar eventos →</a>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Lugares registrados</span>
+                <span class="stat-value" th:text="${totalLugares}">0</span>
+                <a th:href="@{/admin/venues}">Gestionar lugares →</a>
+            </article>
+        </section>
+
+        <!--Tabla de Eventos-->
+        <section class="card">
+            <div class="card-header">
+                <h2>Eventos</h2>
+                <a class="btn btn-primary btn-sm" th:href="@{/admin/events/new}">+ Nuevo evento</a>
+            </div>
+
+            <!--Mantiene y renderiza el elemento en el HTML solo si la condición es verdadera (true). Si es falsa, borra el elemento del DOM.-->
+            <div th:if="${#lists.isEmpty(events)}" class="empty-state">
+                <p class="empty-icon">📭</p>
+                <p>Actualmente no hay eventos programados</p>
+            </div>
+
+            <!--  -->
+            <div th:unless="${#lists.isEmpty(events)}" class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="event : ${events}">
+                            <td th:text="${event.id}">1</td>
+                            <td th:text="${event.nombre}">Evento de ejemplo</td>
+                            <td th:text="${event.fecha}">2026-11-17</td>
+                            <td th:text="${event.descripcion ?: '-'}">Descripción de ejemplo...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <!--Tabla de Luagares-->
+        <section>
+            <section class="card">
+                <div class="card-header">
+                    <h2>Lugares</h2>
+                    <a class="btn btn-primary btn-sm" th:href="@{/admin/venues/new}">+ Nuevo lugar</a>
+                </div>
+
+                <div th:if="${#lists.isEmpty(venues)}" class="empty-state">
+                    <p class="empty-icon">🏛️</p>
+                    <p>Actualmente no hay lugares registrados</p>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(venues)}" class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Capacidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="venue : ${venues}">
+                                <td th:text="${venue.id}">1</td>
+                                <td th:text="${venue.nombre}">Lugar de ejemplo</td>
+                                <td th:text="${venue.direccion}">Calle 1 #2-3</td>
+                                <td><span class="badge" th:text="|${venue.capacidad} personas|">100 personas</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+
+</html>

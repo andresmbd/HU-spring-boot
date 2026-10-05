@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Eventos')}"></head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('events')}"></nav>
+    <main class="container">
+        <div th:replace="~{fragments/layout :: alerts}"></div>
+
+        <header>
+            <div>
+                <h1>Eventos</h1>
+                <p class="subtitle" th:text="|${#lists.size(events)}  evento(s) el catálogo|">0 evento(s) el catálogo
+                </p>
+            </div>
+            <a class="btn btn-primary" th:href="@{/admin/events//new}">+ Nuevo event</a>
+        </header>
+
+        <section class="card">
+            <div th:if="${#lists.isEmpty(events)}" class="empty-state">
+                <p class="empty-icon">📭</p>
+                <p>Actualmente no hay eventos programados</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(events)}" class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="event, stat : ${events}">
+                            <td th:text="${stat.count}">1</td>
+                            <td th:text="${event.nombre}">Evento de ejemplo</td>
+                            <td th:text="${event.fecha}">2026-10-15</td>
+                            <td th:text="${event.descripcion} ?: '—'">Descripción de ejemplo...</td>
+                            <td>
+                                <div class="actions">
+                                    <a class="btn btn-secondary btn-sm"
+                                    th:href="@{/admin/events/{id}/edit(id=${event.id})}">Editar</a>
+
+                                    <form class="inline-form" 
+                                        method="post"
+                                        th:action="@{/admin/events/{id}/delete(id=${event.id})}"
+                                        onsubmit="return confirm('¿Seguro que deseas eliminar este evento?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+
+</html>

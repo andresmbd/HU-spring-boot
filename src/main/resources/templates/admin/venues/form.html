@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Formulario de lugar')}"></head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('venues')}"></nav>
+    <main class="container">
+        <header class="page-header">
+            <div>
+                <h1 th:text="${venue.id == null} ? 'Nuevo lugar' : 'Editar lugar'">Nuevo lugar</h1>
+                <p class="subtitle">Los campos marcados con * son obligatorios</p>
+            </div>
+        </header>
+
+        <section class="card">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <form th:action="${venue.id == null} ? @{/admin/venues} : @{/admin/venues/{id}(id=${venue.id})}"
+                method="post" th:object="${venue}" class="form">
+                <div class="form-group">
+                    <label for="nombre">Nombre *</label>
+                    <input type="text" th:field="*{nombre}" maxlength="150" placeholder="Ej: Auditorio Principal">
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion">Dirección *</label>
+                    <input type="text" th:field="*{direccion}" maxlength="250" required
+                        placeholder="Ej: Calle 50 #20-10">
+                </div>
+
+                <div class="form-group">
+                    <label for="capacidad">Capacidad *</label>
+                    <input type="number" th:field="*{capacidad}" min="1" required placeholder="Ej: 300">
+                    <span class="hint">Número máximo de asistentes.</span>
+                </div>
+
+                <div class="form-actions">
+                    <a class="btn btn-secondary" th:href="@{/admin/venues}">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </section>
+
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+
+</html>
